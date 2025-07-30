@@ -7,8 +7,12 @@ set -e  # Exit on any error
 
 echo "🚀 Starting Backend Tests..."
 
-echo "📦 Running Docker Compose..."
-docker-compose up --build --abort-on-container-exit --exit-code-from test-backend
+echo "📦 Implementing Docker Run..."
+docker run -itd --rm --name cicd-postgres \
+  -e POSTGRES_DB=cicd_workshop \
+  -e POSTGRES_USER=cicd_user \
+  -e POSTGRES_PASSWORD=cicd_password \
+  -p 5432:5432 postgres:15-alpine
 
 # Navigate to backend directory
 cd backend
