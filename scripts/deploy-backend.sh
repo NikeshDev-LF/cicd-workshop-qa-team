@@ -11,6 +11,10 @@ docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$branch_name-latest" .
 
 docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$branch_name-latest"
 
+npm run test:integration
+
+npm run test:unit
+
 
 aws ssm send-command \
     --document-name "AWS-RunShellScript" \
