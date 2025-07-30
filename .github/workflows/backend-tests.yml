@@ -20,14 +20,11 @@ jobs:
         cache-dependency-path: './backend/package-lock.json'
     
     - name: Run Backend Tests
-      working-directory: ./backend
-      run: npm install
-      run: npm run migrate
-      run: npm run dev
-      run: npm run test:integration
-      run: npm run test:unit
-      
-      
+      run: |
+        chmod +x ./scripts/test-backend.sh
+        ./scripts/test-backend.sh
+      env:
+        NODE_ENV: ${{ secrets.NODE_ENV }}
 
 
 
