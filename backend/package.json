@@ -30,7 +30,9 @@
       "src/**/*.js",
       "!src/server.js"
     ],
-    "testTimeout": 10000,
-    "forceExit": true
+    "testTimeout": 15000,
+    "forceExit": true,
+    "detectOpenHandles": true,
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
   }
 }

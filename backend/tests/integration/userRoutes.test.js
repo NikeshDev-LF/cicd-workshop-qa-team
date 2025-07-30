@@ -1,25 +1,38 @@
 const request = require('supertest');
 const app = require('../../src/server');
 const pool = require('../../src/config/database');
+const runMigrations = require('../../src/migrations/migrate');
 
 describe('User Routes Integration Tests', () => {
   let testUserId;
   let createdUserIds = [];
 
   beforeAll(async () => {
-    // Only create test data, don't delete existing data
-    const result = await pool.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
-      ['Test User', 'test@example.com']
-    );
-    testUserId = result.rows[0].id;
-    createdUserIds.push(testUserId);
+    try {
+      // Run migrations to ensure database is set up
+      await runMigrations();
+      
+      // Create test data
+      const result = await pool.query(
+        'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
+        ['Test User', 'test@example.com']
+      );
+      testUserId = result.rows[0].id;
+      createdUserIds.push(testUserId);
+    } catch (error) {
+      console.error('❌ Setup failed:', error);
+      throw error;
+    }
   });
 
   afterAll(async () => {
-    // Only clean up test-created users
-    for (const userId of createdUserIds) {
-      await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+    try {
+      // Only clean up test-created users
+      for (const userId of createdUserIds) {
+        await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+      }
+    } catch (error) {
+      console.error('❌ Cleanup failed:', error);
     }
   });
 

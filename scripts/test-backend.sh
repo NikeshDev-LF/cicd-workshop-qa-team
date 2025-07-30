@@ -14,11 +14,15 @@ docker run -itd --rm --name cicd-postgres \
   -e POSTGRES_PASSWORD=cicd_password \
   -p 5432:5432 postgres:15-alpine
 
+
 # Navigate to backend directory
 cd backend
 
 echo "📦 Installing dependencies..."
 npm install
+
+echo "🔄 Running database migrations..."
+npm run migrate
 
 echo "🧪 Running unit tests..."
 npm run test:unit
