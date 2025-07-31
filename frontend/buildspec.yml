@@ -19,6 +19,8 @@ phases:
       - echo "Building Frontend application"
       - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
       - npm run build
+
+
   post_build:
     commands:
       - echo "Deploying to S3 bucket ${S3_BUCKET_NAME}"
@@ -26,9 +28,6 @@ phases:
       - echo "Invalidating CloudFront distribution ${CLOUDFRONT_DISTRIBUTION_ID}"
       - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
       - echo "🎉 Frontend deployed successfully to S3 + CloudFront!"
-  --paths "/*"
+
+--paths "/*"
       - echo "🎉 Frontend deployed successfully to S3 + CloudFront!"
-
-
-
-
