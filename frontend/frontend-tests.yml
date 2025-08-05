@@ -1,0 +1,26 @@
+version: 0.2
+
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+
+
+  pre_build:
+    commands:
+      - echo "Navigate to Frontend directory..."
+      cd frontend
+      - echo "📦 Installing dependencies..."
+      - npm install
+
+
+  build:
+    commands:
+      - echo "🧪 Running unit tests..."
+      - npm run test:unit
+      - echo "🔗 Running integration tests..."
+      - npm run test:integration
+      - echo "📊 Running all tests with coverage..."
+      - npm test
+      - echo "✅ All frontend tests completed successfully!" 

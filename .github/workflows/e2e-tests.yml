@@ -30,6 +30,7 @@ jobs:
     - name: Run Cypress E2E Tests
       working-directory: ./e2e-tests
       run: npx cypress run
+      run: npx cypress run --spec 'cypress/e2e/**/*.cy.js'
       env:
         CYPRESS_BASE_URL: ${{ secrets.FRONTEND_URL }}
         CYPRESS_API_URL: ${{ secrets.REACT_APP_API_URL }}
