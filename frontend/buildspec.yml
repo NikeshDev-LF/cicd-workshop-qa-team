@@ -13,6 +13,13 @@ phases:
       - cd frontend
       - npm install
 
+      # Send build start notification
+      - |
+        if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"Frontend build started for branch: '${CODEBUILD_SOURCE_VERSION}'"}' \
+            $SLACK_WEBHOOK_URL
+        fi
 
   build:
     commands:
@@ -25,6 +32,22 @@ phases:
     commands:
       - echo "Deploying to S3 bucket ${S3_BUCKET_NAME}"
       - aws s3 sync build s3://${S3_BUCKET_NAME} --delete
-      - echo "Invalidating CloudFront distribution ${CLOUDFRONT_DISTRIBUTION_ID}"
-      - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
-      - echo "🎉 Frontend deployed successfully to S3 + CloudFront!"
+      # Invalidate CloudFront (if configured)
+      - |
+        if [ ! -z "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
+          echo "Invalidating CloudFront..."
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+        fi
+      
+      # Send success notification
+      - |
+        if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"Frontend deployment successful! Branch: '${CODEBUILD_SOURCE_VERSION}' S3 Bucket: '${S3_BUCKET_NAME}'"}' \
+            $SLACK_WEBHOOK_URL
+        fi
+
+artifacts:
+  files:
+    - 'frontend/build/**/*'
+  name: frontend-build
