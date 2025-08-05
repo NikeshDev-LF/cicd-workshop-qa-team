@@ -9,14 +9,18 @@ phases:
 
   pre_build:
     commands:
-      - echo "Installing dependencies..."
-      - cd e2e-tests
+      - echo "Navigate to Frontend directory..."
+      cd frontend
+      - echo "📦 Installing dependencies..."
       - npm install
 
 
   build:
     commands:
-      - echo "Running E2E tests..."
-      - echo "CYPRESS_BASE_URL=${CYPRESS_BASE_URL}" > .env
-      - echo "CYPRESS_API_URL=${CYPRESS_API_URL}" >> .env
-      - npm run cypress:run
+      - echo "🧪 Running unit tests..."
+      - npm run test:unit
+      - echo "🔗 Running integration tests..."
+      - npm run test:integration
+      - echo "📊 Running all tests with coverage..."
+      - npm test
+      - echo "✅ All frontend tests completed successfully!" 
