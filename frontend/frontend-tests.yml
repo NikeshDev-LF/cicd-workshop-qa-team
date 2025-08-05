@@ -10,7 +10,7 @@ phases:
   pre_build:
     commands:
       - echo "Navigate to Frontend directory..."
-      cd frontend
+      - cd frontend
       - echo "📦 Installing dependencies..."
       - npm install
 
