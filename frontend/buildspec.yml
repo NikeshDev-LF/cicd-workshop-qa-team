@@ -31,7 +31,7 @@ phases:
   post_build:
     commands:
       - echo "Deploying to S3 bucket ${S3_BUCKET_NAME}"
-      - aws s3 sync build s3://${S3_BUCKET_NAME} --delete
+      -  - aws s3 sync build/ s3://$S3_BUCKET_NAME/ --delete
       # Invalidate CloudFront (if configured)
       - |
         if [ ! -z "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
